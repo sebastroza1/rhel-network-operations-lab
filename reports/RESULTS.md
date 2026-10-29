@@ -41,7 +41,15 @@ These timings are diagnostic observations, not performance benchmarks.
 - `docker compose config --quiet`: passed. Docker emitted a host config-file access
   warning, but parsed the model successfully.
 - Bash scripts: syntax checked using Git Bash.
-- UBI image build, inter-container DNS/TCP, and Linux Bash execution: **not run**.
+- GitHub Actions Linux run
+  [40825190683](https://github.com/sebastroza1/rhel-network-operations-lab/actions/runs/40825190683):
+  passed both `python-tests` and `compose-config`. The permissions exercise
+  verified `mode=600` and owner `runner:runner`; because the hosted runner was
+  not root-capable, it explicitly recorded `cross_user=SKIPPED`. This is not
+  evidence that the privileged cross-user transition was executed.
+- UBI image build, inter-container DNS/TCP, and Bash execution inside the UBI
+  container: **not run**. The standalone Bash exercises did run in GitHub's
+  Ubuntu environment as described above.
   The installed Docker client could not connect to a Docker daemon, and the only
   WSL distribution available was the stopped Docker-managed distribution.
 - systemd, SELinux, firewalld, kernel, and full RHEL service tests: **not run and
