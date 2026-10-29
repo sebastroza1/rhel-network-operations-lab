@@ -11,7 +11,8 @@ routing table, or global network configuration is changed.
 - Distinguishing DNS, TCP refusal, HTTP 5xx, and application latency failures.
 - Explicit timeouts, bounded retries, incremental backoff, and elapsed-time evidence.
 - Linux inventory using `ip`, `ss`, `/proc`, `ps`, `free`, `df`, identity, and resolver tools.
-- File permissions and an optional unprivileged-user read check.
+- File mode and owner verification plus a cross-user read check that reports
+  `SKIPPED` or `NOT_VERIFIED` when the process cannot change identity.
 - Process creation, SIGTERM handling, wait status, and cleanup.
 - A capped 1–32 MiB disk-pressure fixture that is always removed by a trap.
 - An isolated Compose network and hardened, read-only UBI application containers.
@@ -78,6 +79,10 @@ logs in that order. The detailed decision guide and command set are in
 
 - Loopback behavior does not reproduce packet loss, multi-host routing, MTU, NAT,
   TLS, or a production resolver hierarchy.
+- A normal GitHub-hosted runner cannot change UID with `setpriv`; CI therefore
+  verifies POSIX mode/ownership and records the cross-user check as `SKIPPED`.
+  That privileged check is only `VERIFIED` in a controlled root-capable Linux
+  environment and is never inferred from an omitted command.
 - Python's HTTP server is an experiment fixture, not a production service.
 - A port reserved and then released can theoretically be claimed by another process.
 - Docker-dependent evidence requires a working daemon; static configuration parsing
